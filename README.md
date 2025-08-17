@@ -1,5 +1,11 @@
-# narga-epub-boilerplate
+# narga-epub-core
 An EPUB Boilerplate for generate ebook. 
+
+
+## Styles for ePub 3
+
+- `styles.css` has optimized CSS codes for ePub 3 reader which includes ePub reader, reader devices like Kindle, Kobo ... 
+
 
 ## Favourited Fonts
 
