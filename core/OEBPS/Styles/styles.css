@@ -1,0 +1,438 @@
+@charset "utf-8";
+@namespace epub url(http://www.idpf.org/2007/ops);
+
+/* ================================================================
+ * STYLESHEET EPUB MASTER
+ * Phiên bản: 6.0 (Master)
+ * ================================================================ */
+
+/*
+  1. THIẾT LẬP CHUNG & FONT
+================================================================
+*/
+
+/*
+  KHAI BÁO FONT
+*/
+
+/* GHI CHÚ: Đảm bảo bạn có giấy phép sử dụng và nhúng font.
+   Nên dùng định dạng WOFF hoặc WOFF2 để tối ưu dung lượng nếu có thể. */
+@font-face {
+    font-family: 'Bookerly';
+    font-weight: normal;
+    font-style: normal;
+    src: url('../Fonts/Bookerly.ttf');
+}
+
+@font-face {
+    font-family: 'Bookerly';
+    font-weight: bold;
+    font-style: normal;
+    src: url('../Fonts/Bookerly-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'Bookerly';
+    font-weight: normal;
+    font-style: italic;
+    src: url('../Fonts/Bookerly-Italic.ttf');
+}
+
+@font-face {
+    font-family: 'Bookerly';
+    font-weight: bold;
+    font-style: italic;
+    src: url('../Fonts/Bookerly-BoldItalic.ttf');
+}
+
+/* Đảm bảo các thành phần HTML5 hiển thị dạng khối trên trình đọc EPUB 2 cũ */
+article,
+aside,
+figure,
+figcaption,
+footer,
+header,
+main,
+nav,
+section {
+    display: block;
+}
+
+body {
+    /* Chuỗi font tối ưu cho các máy đọc sách phổ biến, không cần nhúng font */
+    font-family: "Bookerly", "Kobo Nickel", "Malabar", Georgia, "Times New Roman", Times, serif;
+    font-size: 100%;
+    line-height: 1.5;
+    widows: 2;
+    orphans: 2;
+    /* Xử lý lề an toàn: để thiết bị kiểm soát lề ngoài, CSS kiểm soát lề trong */
+    margin: 0;
+    padding: 1em 5px;
+}
+
+.blank-page {
+    page-break-before: always;
+    page-break-after: always;
+    position: relative;
+    display: table;
+    /* biến .blank-page thành bảng */
+    width: 100%;
+    height: 100vh;
+    /* cao đầy trang */
+    margin: 0;
+}
+
+.blank-page>* {
+    display: table-cell;
+    /* mỗi phần tử con là ô bảng */
+    vertical-align: middle;
+    /* căn theo chiều dọc */
+    text-align: center;
+    /* căn theo chiều ngang */
+    margin: 0 auto;
+}
+
+.blank-page blockquote cite {
+    display: block !important;
+    width: 100% !important;
+    margin: 0;
+    padding: 0 1em;
+}
+
+/* Không hiển thị bất kỳ padding hoặc margin nào ảnh hưởng đến vị trí */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+
+/*
+  2. ĐỊNH DẠNG VĂN BẢN (TYPOGRAPHY)
+================================================================
+*/
+
+p {
+    text-align: justify;
+    text-indent: 1.5em;
+    /* Thụt lề đầu dòng kiểu sách in */
+    margin: 0;
+    padding: 0;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    -epub-hyphens: auto;
+}
+
+/* Đoạn văn ngay sau tiêu đề hoặc dấu ngắt sẽ không thụt lề */
+h1+p,
+h2+p,
+h3+p,
+h4+p,
+hr+p,
+blockquote+p,
+figure+p {
+    text-indent: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    line-height: 1.2;
+    margin: 0.25em 0 0.25em 0;
+    text-indent: 0;
+    -webkit-hyphens: none;
+    hyphens: none;
+    -epub-hyphens: none;
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+h1,
+h2,
+h3 {
+    text-align: center;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.6em;
+}
+
+h3 {
+    font-size: 1.3em;
+}
+
+/*
+  3. CÁC THÀNH PHẦN ĐẶC BIỆT (COMPONENTS)
+================================================================
+*/
+
+/* ----- Blockquotes ----- */
+blockquote {
+    margin: 1.5em 2.5em;
+    font-style: italic;
+}
+
+blockquote.border {
+    padding-left: 1em;
+    margin-left: 1.5em;
+    border-left: 2px solid #999;
+}
+
+blockquote.fancy {
+    padding: 0 4% 0 1rem;
+    margin-left: 1.5em;
+    border-left: 0.875rem solid #9F9F9F;
+}
+
+/* ----- Dropcaps (Cải tiến) ----- */
+.dropcap {
+    /* Phương pháp fallback cho máy đọc sách cũ */
+    float: left;
+    font-size: 3.5em;
+    line-height: 0.8;
+    margin-right: 0.1em;
+    font-weight: bold;
+}
+
+@supports (initial-letter: 3) {
+    .dropcap {
+        /* Phương pháp hiện đại cho máy đọc sách mới */
+        initial-letter: 3;
+        /* Chữ to bằng 3 dòng */
+        margin-right: 0.2em;
+        float: none;
+        /* Tắt float khi dùng initial-letter */
+    }
+}
+
+/* ----- Hình ảnh & Chú thích ----- */
+figure {
+    display: block;
+    margin: 1.5em 0;
+    padding: 0;
+    page-break-inside: avoid;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+figcaption,
+caption {
+    display: block;
+    font-size: 0.8em;
+    font-style: italic;
+    text-align: center;
+    margin: 0.5em auto 0 auto;
+    text-indent: 0;
+}
+
+/* ----- Bảng biểu & Chú thích bảng ----- */
+table {
+    margin: 1.5em auto;
+    border-collapse: collapse;
+    max-width: 100%;
+    page-break-inside: avoid;
+}
+
+th,
+td {
+    border: 1px solid #999;
+    padding: 0.5em;
+    text-align: left;
+    vertical-align: middle;
+}
+
+table.grid th,
+table.grid td {
+    border: 1px solid #555;
+}
+
+.caption-bottom {
+    caption-side: bottom;
+}
+
+/* ----- Các thành phần khác ----- */
+hr {
+    border: 0;
+    border-top: 1px solid currentColor;
+    opacity: 0.5;
+    width: 50%;
+    margin: 2em auto;
+}
+
+hr.square-dots {
+    overflow: visible;
+    border: 0;
+    /* Xóa đường kẻ mặc định */
+    text-align: center;
+    /* Căn giữa các chấm */
+    margin: 1em 0;
+    /* Thêm khoảng cách trên/dưới */
+    width: 100%;
+    /* Đảm bảo hr chiếm toàn bộ chiều rộng để text-align hoạt động đúng */
+    /*     height: 0;  Giữ hr mỏng, tránh khoảng trắng thừa */
+}
+
+hr.square-dots:after {
+    content: "▪ ▪ ▪";
+    /* 3 chấm vuông */
+    display: inline-block;
+    position: relative;
+    font-size: 1.2em;
+    /* Kích thước chấm */
+    padding: 0 0.5em;
+    /* Khoảng cách giữa các chấm và lề */
+    letter-spacing: 0.5em;
+    /* Tăng khoảng cách giữa các chấm nếu cần */
+    background-color: inherit;
+    /* Giữ nền trong suốt để tránh lệch */
+}
+
+
+ul,
+ol {
+    margin: 1em 0;
+    padding-left: 2.5em;
+}
+
+/*
+  5. ĐỊNH DẠNG INLINE & CÁC LỚP TIỆN ÍCH
+================================================================
+*/
+
+/* ----- Định dạng thẻ HTML gốc ----- */
+/* GHI CHÚ: Các quy tắc này dành cho các thẻ inline cơ bản.
+   Hệ thống lớp bên dưới sẽ mạnh mẽ hơn để định dạng cả khối. */
+em,
+cite {
+    font-style: italic;
+}
+
+strong {
+    font-weight: bold;
+}
+
+sup,
+a[epub|type="noteref"] {
+    vertical-align: super;
+    font-size: 0.75em;
+    line-height: 1;
+}
+
+sub {
+    vertical-align: sub;
+    font-size: 0.75em;
+    line-height: 1;
+}
+
+/* ----- Hệ thống lớp định dạng khối văn bản (rút gọn) ----- */
+/* Các lớp này có thể áp dụng cho một thẻ <p> hoặc cả khối <div> */
+
+/* Lớp định dạng đơn */
+.i,
+.i p {
+    font-style: italic;
+}
+
+.b,
+.b p {
+    font-weight: bold;
+}
+
+.u,
+.u p {
+    text-decoration: underline;
+}
+
+/* Lớp định dạng kết hợp */
+.bi,
+.bi p {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.bu,
+.bu p {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.iu,
+.iu p {
+    font-style: italic;
+    text-decoration: underline;
+}
+
+.ibu,
+.ibu p {
+    font-weight: bold;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+
+/* ----- Các lớp tiện ích khác ----- */
+.smallcaps {
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+}
+
+.text-center {
+    text-align: center !important;
+    text-indent: 0 !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.no-indent {
+    text-indent: 0 !important;
+}
+
+/* Dùng cho các đoạn thơ hoặc đoạn cần có khoảng trắng trên dưới */
+.poem,
+.epigraph {
+    display: block;
+    margin: 1.5em 0;
+    text-indent: 0;
+}
+
+/*
+  6. LIÊN KẾT & NAVIGATION
+================================================================
+*/
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+nav[epub|type~="toc"] ol,
+nav[epub|type~="landmarks"] ol,
+nav[epub|type~="page-list"] ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav[epub|type~="landmarks"],
+nav[epub|type~="page-list"] {
+    display: none;
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package version="3.0" unique-identifier="BookId" xmlns="http://www.idpf.org/2007/opf">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+    <dc:identifier id="BookId">urn:uuid:a2e954d2-b13c-4738-8b54-1d9c86221424</dc:identifier>
+    <dc:language>en</dc:language>
+    <dc:title>[Main title here]</dc:title>
+    <meta property="dcterms:modified">2025-08-17T12:17:31Z</meta>
+    <meta name="Sigil version" content="2.6.0"/>
+  </metadata>
+  <manifest>
+    <item id="Section0001.xhtml" href="Text/Section0001.xhtml" media-type="application/xhtml+xml"/>
+    <item id="sgc-nav.css" href="Styles/sgc-nav.css" media-type="text/css"/>
+    <item id="nav.xhtml" href="Text/nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
+    <item id="Bookerly-Bold.ttf" href="Fonts/Bookerly-Bold.ttf" media-type="font/ttf"/>
+    <item id="Bookerly-BoldItalic.ttf" href="Fonts/Bookerly-BoldItalic.ttf" media-type="font/ttf"/>
+    <item id="Bookerly-Italic.ttf" href="Fonts/Bookerly-Italic.ttf" media-type="font/ttf"/>
+    <item id="Bookerly.ttf" href="Fonts/Bookerly.ttf" media-type="font/ttf"/>
+    <item id="styles.css" href="Styles/styles.css" media-type="text/css"/>
+  </manifest>
+  <spine>
+    <itemref idref="Section0001.xhtml"/>
+    <itemref idref="nav.xhtml" linear="no"/>
+  </spine>
+</package>
