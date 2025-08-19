@@ -2,111 +2,102 @@
 @namespace epub url(http://www.idpf.org/2007/ops);
 
 /* ================================================================
- * STYLESHEET EPUB MASTER
- * Phiên bản: 6.0 (Master)
+ * STYLESHEET EPUB MASTER - TƯƠNG THÍCH & ĐẦY ĐỦ TÍNH NĂNG
+ * Phiên bản: 7.0 (Tối ưu hóa nâng cao)
+ * Hợp nhất và cải tiến dựa trên các tiêu chuẩn EPUB 3,
+ * đảm bảo tương thích ngược và tối ưu cho Kindle, Kobo.
  * ================================================================ */
 
 /*
-  1. THIẾT LẬP CHUNG & FONT
+  1. THIẾT LẬP TOÀN CỤC, BIẾN & FONT
 ================================================================
 */
 
+:root {
+    /*
+     * TỐI ƯU HÓA CHUỖI FONT (FONT STACK)
+     * Chuỗi font này ưu tiên các font mặc định chất lượng cao của từng thiết bị.
+     * 1. 'Bookerly': Font nhúng của bạn (nếu có).
+     * 2. "Caecilia", "Bookerly": Font mặc định của Kindle.
+     * 3. "Kobo Nickel": Font mặc định của Kobo.
+     * 4. "Malabar", "Georgia": Các font serif thay thế phổ biến, chất lượng.
+     * 5. "Times New Roman", Times, serif: Fallback cuối cùng, có mặt ở mọi nơi.
+    */
+    --font-main: 'Bookerly', "Caecilia", "Bookerly", "Kobo Nickel", "Malabar", Georgia, "Times New Roman", Times, serif;
+    --font-mono: "Courier New", Courier, monospace;
+    --color-border: #999;
+    --color-border-dark: #555;
+}
+
 /*
-  KHAI BÁO FONT
+ * KHAI BÁO FONT
+ * GHI CHÚ VỀ ĐỊNH DẠNG FONT:
+ * - Tương thích nhất: TTF / OTF (hoạt động trên mọi thiết bị, kể cả rất cũ).
+ * - Tối ưu nhất (dung lượng nhỏ): WOFF2.
+ * - Cân bằng nhất (khuyến nghị): WOFF (dung lượng nhỏ và tương thích rất rộng rãi).
+ * -> Cấu trúc src bên dưới sẽ ưu tiên WOFF2 -> WOFF -> TTF, giúp thiết bị
+ * tự chọn định dạng tốt nhất mà nó hỗ trợ.
 */
-
-/* GHI CHÚ: Đảm bảo bạn có giấy phép sử dụng và nhúng font.
-   Nên dùng định dạng WOFF hoặc WOFF2 để tối ưu dung lượng nếu có thể. */
 @font-face {
     font-family: 'Bookerly';
     font-weight: normal;
     font-style: normal;
-    src: url('../Fonts/Bookerly.ttf');
+    font-display: swap;
+    src: url('../Fonts/Bookerly.woff2') format('woff2'),
+         url('../Fonts/Bookerly.woff') format('woff'),
+         url('../Fonts/Bookerly.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Bookerly';
     font-weight: bold;
     font-style: normal;
-    src: url('../Fonts/Bookerly-Bold.ttf');
+    font-display: swap;
+    src: url('../Fonts/Bookerly-Bold.woff2') format('woff2'),
+         url('../Fonts/Bookerly-Bold.woff') format('woff'),
+         url('../Fonts/Bookerly-Bold.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Bookerly';
     font-weight: normal;
     font-style: italic;
-    src: url('../Fonts/Bookerly-Italic.ttf');
+    font-display: swap;
+    src: url('../Fonts/Bookerly-Italic.woff2') format('woff2'),
+         url('../Fonts/Bookerly-Italic.woff') format('woff'),
+         url('../Fonts/Bookerly-Italic.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Bookerly';
     font-weight: bold;
     font-style: italic;
-    src: url('../Fonts/Bookerly-BoldItalic.ttf');
+    font-display: swap;
+    src: url('../Fonts/Bookerly-BoldItalic.woff2') format('woff2'),
+         url('../Fonts/Bookerly-BoldItalic.woff') format('woff'),
+         url('../Fonts/Bookerly-BoldItalic.ttf') format('truetype');
 }
 
-/* Đảm bảo các thành phần HTML5 hiển thị dạng khối trên trình đọc EPUB 2 cũ */
-article,
-aside,
-figure,
-figcaption,
-footer,
-header,
-main,
-nav,
-section {
-    display: block;
+/* THIẾT LẬP CƠ BẢN */
+html {
+    font-size: 100%;
 }
 
 body {
-    /* Chuỗi font tối ưu cho các máy đọc sách phổ biến, không cần nhúng font */
-    font-family: "Bookerly", "Kobo Nickel", "Malabar", Georgia, "Times New Roman", Times, serif;
-    font-size: 100%;
+    font-family: var(--font-main);
     line-height: 1.5;
     widows: 2;
     orphans: 2;
-    /* Xử lý lề an toàn: để thiết bị kiểm soát lề ngoài, CSS kiểm soát lề trong */
-    margin: 0;
-    padding: 1em 5px;
-}
-
-.blank-page {
-    page-break-before: always;
-    page-break-after: always;
-    position: relative;
-    display: table;
-    /* biến .blank-page thành bảng */
-    width: 100%;
-    height: 100vh;
-    /* cao đầy trang */
-    margin: 0;
-}
-
-.blank-page>* {
-    display: table-cell;
-    /* mỗi phần tử con là ô bảng */
-    vertical-align: middle;
-    /* căn theo chiều dọc */
-    text-align: center;
-    /* căn theo chiều ngang */
-    margin: 0 auto;
-}
-
-.blank-page blockquote cite {
-    display: block !important;
-    width: 100% !important;
-    margin: 0;
-    padding: 0 1em;
-}
-
-/* Không hiển thị bất kỳ padding hoặc margin nào ảnh hưởng đến vị trí */
-body,
-html {
+    /* QUAN TRỌNG: Không đặt `margin` hay `padding` cho `body` để thiết bị tự quản lý lề ngoài.
+       Đây là cách làm an toàn nhất để tránh lỗi lề kép (double margin) trên các thiết bị. */
     margin: 0;
     padding: 0;
-    height: 100%;
 }
 
+/* Đảm bảo các thành phần HTML5 hiển thị dạng khối trên trình đọc EPUB 2 cũ */
+article, aside, figure, figcaption, footer, header, main, nav, section {
+    display: block;
+}
 
 /*
   2. ĐỊNH DẠNG VĂN BẢN (TYPOGRAPHY)
@@ -115,324 +106,225 @@ html {
 
 p {
     text-align: justify;
-    text-indent: 1.5em;
-    /* Thụt lề đầu dòng kiểu sách in */
-    margin: 0;
+    text-indent: 1.5rem;
+    margin: 0 0 1rem 0; /* Thêm khoảng cách dưới giữa các đoạn văn */
     padding: 0;
     -webkit-hyphens: auto;
-    hyphens: auto;
     -epub-hyphens: auto;
+    hyphens: auto;
 }
 
-/* Đoạn văn ngay sau tiêu đề hoặc dấu ngắt sẽ không thụt lề */
-h1+p,
-h2+p,
-h3+p,
-h4+p,
-hr+p,
-blockquote+p,
-figure+p {
+/* Đoạn văn đầu tiên hoặc sau các yếu tố ngăn cách sẽ không thụt lề */
+p:first-of-type,
+h1+p, h2+p, h3+p, h4+p, blockquote+p, figure+p {
     text-indent: 0;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-main);
     line-height: 1.2;
-    margin: 0.25em 0 0.25em 0;
+    margin: 1.5rem 0 1rem 0;
     text-indent: 0;
+    font-weight: bold;
     -webkit-hyphens: none;
-    hyphens: none;
     -epub-hyphens: none;
-    page-break-after: avoid;
+    hyphens: none;
     break-after: avoid;
+    page-break-after: avoid; /* Fallback cho thiết bị cũ */
 }
 
-h1,
-h2,
-h3 {
-    text-align: center;
-}
-
-h1 {
-    font-size: 2em;
-}
-
-h2 {
-    font-size: 1.6em;
-}
-
-h3 {
-    font-size: 1.3em;
-}
+h1, h2, h3 { text-align: center; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.3rem; }
+h4 { font-size: 1.1rem; text-align: left;}
+h5 { font-size: 1rem; text-align: left;}
+h6 { font-size: 0.9rem; text-align: left;}
 
 /*
   3. CÁC THÀNH PHẦN ĐẶC BIỆT (COMPONENTS)
 ================================================================
 */
 
-/* ----- Blockquotes ----- */
+/* ----- Trích dẫn (Blockquotes) ----- */
 blockquote {
-    margin: 1.5em 2.5em;
+    margin: 1.5rem 2.5rem;
     font-style: italic;
 }
-
+blockquote p {
+    margin-bottom: 0.5rem;
+    text-indent: 0;
+}
 blockquote.border {
-    padding-left: 1em;
-    margin-left: 1.5em;
-    border-left: 2px solid #999;
+    padding-left: 1rem;
+    margin-left: 1.5rem;
+    border-left: 2px solid var(--color-border);
 }
 
-blockquote.fancy {
-    padding: 0 4% 0 1rem;
-    margin-left: 1.5em;
-    border-left: 0.875rem solid #9F9F9F;
-}
-
-/* ----- Dropcaps (Cải tiến) ----- */
+/* ----- Chữ cái lớn đầu dòng (Dropcaps) ----- */
 .dropcap {
-    /* Phương pháp fallback cho máy đọc sách cũ */
+    /* Fallback cho máy đọc sách cũ */
     float: left;
     font-size: 3.5em;
     line-height: 0.8;
-    margin-right: 0.1em;
+    margin: 0.1em 0.1em 0 0;
     font-weight: bold;
 }
-
-@supports (initial-letter: 3) {
+@supports (initial-letter: 3) or (-webkit-initial-letter: 3) {
     .dropcap {
-        /* Phương pháp hiện đại cho máy đọc sách mới */
+        /* Phương pháp hiện đại, căn chỉnh hoàn hảo hơn */
+        -webkit-initial-letter: 3;
         initial-letter: 3;
-        /* Chữ to bằng 3 dòng */
-        margin-right: 0.2em;
+        margin-right: 0.2rem;
         float: none;
-        /* Tắt float khi dùng initial-letter */
     }
 }
 
 /* ----- Hình ảnh & Chú thích ----- */
 figure {
     display: block;
-    margin: 1.5em 0;
+    margin: 1.5rem 0;
     padding: 0;
-    page-break-inside: avoid;
+    break-inside: avoid;
+    page-break-inside: avoid; /* Fallback */
 }
-
 img {
     max-width: 100%;
     height: auto;
     display: block;
     margin: 0 auto;
 }
-
-figcaption,
-caption {
+figcaption, caption {
     display: block;
-    font-size: 0.8em;
+    font-size: 0.8rem;
     font-style: italic;
     text-align: center;
-    margin: 0.5em auto 0 auto;
+    margin: 0.5rem auto 0 auto;
     text-indent: 0;
 }
 
-/* ----- Bảng biểu & Chú thích bảng ----- */
+/* ----- Bảng biểu ----- */
 table {
-    margin: 1.5em auto;
+    margin: 1.5rem auto;
     border-collapse: collapse;
     max-width: 100%;
-    page-break-inside: avoid;
+    break-inside: avoid;
+    page-break-inside: avoid; /* Fallback */
 }
-
-th,
-td {
-    border: 1px solid #999;
-    padding: 0.5em;
+th, td {
+    border: 1px solid var(--color-border);
+    padding: 0.5rem;
     text-align: left;
     vertical-align: middle;
 }
 
-table.grid th,
-table.grid td {
-    border: 1px solid #555;
-}
-
-.caption-bottom {
-    caption-side: bottom;
-}
-
-/* ----- Các thành phần khác ----- */
+/* ----- Đường kẻ & Dấu ngăn cách ----- */
 hr {
     border: 0;
     border-top: 1px solid currentColor;
     opacity: 0.5;
     width: 50%;
-    margin: 2em auto;
+    margin: 2rem auto;
 }
 
-hr.square-dots {
-    overflow: visible;
+/* Dấu ngăn cách trang trí. Hoạt động tốt trên hầu hết các thiết bị,
+   nhưng có thể không hiển thị trên Kindle rất cũ. */
+.dots,
+.ornament {
     border: 0;
-    /* Xóa đường kẻ mặc định */
     text-align: center;
-    /* Căn giữa các chấm */
-    margin: 1em 0;
-    /* Thêm khoảng cách trên/dưới */
     width: 100%;
-    /* Đảm bảo hr chiếm toàn bộ chiều rộng để text-align hoạt động đúng */
-    /*     height: 0;  Giữ hr mỏng, tránh khoảng trắng thừa */
+    margin: 0.5rem auto; /* Khoảng cách trên dưới là 0.5em */
 }
-
-hr.square-dots:after {
+.dots::after {
     content: "▪ ▪ ▪";
-    /* 3 chấm vuông */
-    display: inline-block;
-    position: relative;
-    font-size: 1.2em;
-    /* Kích thước chấm */
-    padding: 0 0.5em;
-    /* Khoảng cách giữa các chấm và lề */
+    font-size: 1.2rem;
     letter-spacing: 0.5em;
-    /* Tăng khoảng cách giữa các chấm nếu cần */
-    background-color: inherit;
-    /* Giữ nền trong suốt để tránh lệch */
+    color: var(--color-border);
+}
+.ornament::after {
+    content: "✽ ✽ ✽";
+    font-size: 1.2rem;
+    letter-spacing: 0.5em;
+    color: var(--color-border);
 }
 
-
-ul,
-ol {
-    margin: 1em 0;
-    padding-left: 2.5em;
+/* ----- Trang căn giữa nội dung (Full Page Center) ----- */
+/* Lớp này dùng để tạo một trang mà nội dung bên trong được căn chính giữa
+   theo cả chiều ngang và chiều dọc. Lý tưởng cho trang bìa phụ, trích dẫn đặc biệt. */
+.full-page-center {
+    display: flex;
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center;    /* Căn giữa theo chiều dọc */
+    min-height: 100vh;      /* Chiều cao tối thiểu bằng 100% chiều cao màn hình */
+    text-align: center;     /* Căn giữa chữ cho các thẻ con */
+    padding: 0 1rem;        /* Thêm padding nhẹ để nội dung không chạm sát viền */
+    margin: 0;
+    page-break-before: always; /* Luôn bắt đầu trên một trang mới */
 }
-
 /*
-  5. ĐỊNH DẠNG INLINE & CÁC LỚP TIỆN ÍCH
+  4. ĐỊNH DẠNG INLINE & CÁC LỚP TIỆN ÍCH
 ================================================================
 */
 
-/* ----- Định dạng thẻ HTML gốc ----- */
-/* GHI CHÚ: Các quy tắc này dành cho các thẻ inline cơ bản.
-   Hệ thống lớp bên dưới sẽ mạnh mẽ hơn để định dạng cả khối. */
-em,
-cite {
-    font-style: italic;
-}
+/* ----- Thẻ HTML gốc ----- */
+em, i, cite, var { font-style: italic; }
+strong, b { font-weight: bold; }
+u, ins { text-decoration: underline; }
+s, strike, del { text-decoration: line-through; }
+sup, a[epub|type="noteref"] { vertical-align: super; font-size: 0.75em; line-height: 1; }
+sub { vertical-align: sub; font-size: 0.75em; line-height: 1; }
+code, kbd, tt, samp { font-family: var(--font-mono); }
 
-strong {
-    font-weight: bold;
-}
+/* ----- Lớp tiện ích ----- */
+.italic { font-style: italic; }
+.bold { font-weight: bold; }
+.underline { text-decoration: underline; }
+.strikethrough { text-decoration: line-through; }
+.monospace { font-family: var(--font-mono); }
+.smallcaps { font-variant: small-caps; letter-spacing: 0.1em; }
 
-sup,
-a[epub|type="noteref"] {
-    vertical-align: super;
-    font-size: 0.75em;
-    line-height: 1;
-}
+.text-center { text-align: center !important; text-indent: 0 !important; }
+.text-right { text-align: right !important; text-indent: 0 !important; }
+.text-left { text-align: left !important; }
+.no-indent { text-indent: 0 !important; }
 
-sub {
-    vertical-align: sub;
-    font-size: 0.75em;
-    line-height: 1;
-}
-
-/* ----- Hệ thống lớp định dạng khối văn bản (rút gọn) ----- */
-/* Các lớp này có thể áp dụng cho một thẻ <p> hoặc cả khối <div> */
-
-/* Lớp định dạng đơn */
-.i,
-.i p {
-    font-style: italic;
-}
-
-.b,
-.b p {
-    font-weight: bold;
-}
-
-.u,
-.u p {
-    text-decoration: underline;
-}
-
-/* Lớp định dạng kết hợp */
-.bi,
-.bi p {
-    font-weight: bold;
-    font-style: italic;
-}
-
-.bu,
-.bu p {
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-.iu,
-.iu p {
-    font-style: italic;
-    text-decoration: underline;
-}
-
-.ibu,
-.ibu p {
-    font-weight: bold;
-    font-style: italic;
-    text-decoration: underline;
-}
-
-
-/* ----- Các lớp tiện ích khác ----- */
-.smallcaps {
-    font-variant: small-caps;
-    letter-spacing: 0.05em;
-}
-
-.text-center {
+/* Đảm bảo các thẻ <p> bên trong một khối được căn giữa cũng sẽ được căn giữa */
+.text-center p {
     text-align: center !important;
     text-indent: 0 !important;
 }
 
-.text-right {
-    text-align: right !important;
-}
-
-.text-left {
-    text-align: left !important;
-}
-
-.no-indent {
-    text-indent: 0 !important;
-}
-
-/* Dùng cho các đoạn thơ hoặc đoạn cần có khoảng trắng trên dưới */
-.poem,
-.epigraph {
-    display: block;
-    margin: 1.5em 0;
-    text-indent: 0;
+/* Tạo khoảng nghỉ giữa các đoạn văn, hữu ích cho việc ngắt cảnh */
+.space-break {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 /*
-  6. LIÊN KẾT & NAVIGATION
+  5. LIÊN KẾT & NAVIGATION (EPUB 3)
 ================================================================
 */
 
 a {
     text-decoration: none;
     color: inherit;
+    /* Gợi ý: Để liên kết dễ nhận biết hơn, bạn có thể bật dòng dưới đây
+    text-decoration: underline; */
 }
 
-nav[epub|type~="toc"] ol,
-nav[epub|type~="landmarks"] ol,
-nav[epub|type~="page-list"] ol {
+/* Ẩn các mục lục không cần thiết trên trang đọc (Landmarks, Page List) */
+nav[epub|type~="landmarks"],
+nav[epub|type~="page-list"] {
+    display: none;
+}
+
+/* Định dạng cơ bản cho mục lục trong sách (Table of Contents) */
+nav[epub|type~="toc"] ol {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-
-nav[epub|type~="landmarks"],
-nav[epub|type~="page-list"] {
-    display: none;
+nav[epub|type~="toc"] li {
+    margin: 0.5rem 0;
 }
